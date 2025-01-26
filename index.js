@@ -21,7 +21,7 @@ const app = express();
 const mongoUrl = process.env.MONGO_DB_URL
 
 
-app.use(cors());
+app.use(cors())
 mongoose.connect(mongoUrl, {})
 
 const connection = mongoose.connection;
