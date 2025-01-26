@@ -8,6 +8,8 @@ import userRouter from "./routes/userRouter.js";
 import orderRouter from "./routes/orderRouter.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import cors from "cors"
+
 dotenv.config();
 
 const app = express();
@@ -18,6 +20,8 @@ const app = express();
 //DB link hide in .env file and use as below
 const mongoUrl = process.env.MONGO_DB_URL
 
+
+app.use(cors());
 mongoose.connect(mongoUrl, {})
 
 const connection = mongoose.connection;
