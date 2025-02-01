@@ -25,21 +25,26 @@ import { isAdmin } from "./userController.js";
 //get product using async await function
 
 
-export async function getProduct(req,res){
+// export async function getProduct(req,res){
 
-  try{
-    const productList = await Product.find()
+//   try{
+//     const productList = await Product.find()
 
-    res.json({
-      list : productList
-    })
-  }catch(e){
-    res.json({
-      message : "Error"
-    })
-  }
+//     res.json({
+//       list : productList
+//     })
+//   }catch(e){
+//     res.json({
+//       message : "Error"
+//     })
+//   }
+// }
+
+export function getProduct(req, res) {
+  Product.find({}).then((products) => {
+    res.json(products);
+  });
 }
-
 
 export function createProduct(req,res){
 
