@@ -48,6 +48,8 @@ export function getProduct(req, res) {
 
 export function createProduct(req,res){
 
+
+
   if(!isAdmin(req)){
 
     res.json({
@@ -56,7 +58,12 @@ export function createProduct(req,res){
     return
   }
 
-  const product = new Product(req.body)
+  const newProductData = req.body;
+
+  // Log the product details to the console
+  console.log("Request Product Details:", newProductData);
+
+  const product = new Product(newProductData);
 
   product.save().then(()=>{
     res.json({
