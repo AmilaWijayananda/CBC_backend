@@ -53,7 +53,7 @@ export function createProduct(req,res){
   if(!isAdmin(req)){
 
     res.json({
-      message : "Please login as admin"
+      message : "Please login as administrator"
     })
     return
   }
@@ -76,24 +76,27 @@ export function createProduct(req,res){
   })
 }
 
-export function deleteProduct(req,res){
-  Product.deleteOne({name : req.body.name}).then(
-    ()=>{
-      res.json(
-        {
-          message : "Product deleted successfully"
-        }
-      )
-    }
-  ).catch(
-    ()=>{
-      res.json(
-        {
-          message : "Product not deleted"
-        }
-      )
-    }
-  )
+export function deleteProduct(req, res) {
+  if (!isAdmin(req)) {
+    res.status(403).json({
+      message: "Please login as administrator",
+    });
+    return;
+  }
+
+  const productId = req.params.productId;
+
+  Product.deleteOne({ productId: productId })
+    .then(() => {
+      res.json({
+        message: "Product deleted",
+      });
+    })
+    .catch((error) => {
+      res.status(403).json({
+        message: error,
+      });
+    });
 }
 
 
