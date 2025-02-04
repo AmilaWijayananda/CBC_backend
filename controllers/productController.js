@@ -140,4 +140,28 @@ export function getProductByLinkName(req,res){
   )
 }
 
+export function updateProduct(req, res) {
+  if (!isAdmin(req)) {
+    res.status(403).json({
+      message: "Please login as administrator",
+    });
+    return;
+  }
+
+  const productId = req.params.productId;
+  const updatedProductData = req.body;
+
+  Product.updateOne({ productId: productId }, updatedProductData)
+    .then(() => {
+      res.json({
+        message: "Product updated",
+      });
+    })
+    .catch((error) => {
+      res.status(403).json({
+        message: error,
+      });
+    }); 
+  }
+
 

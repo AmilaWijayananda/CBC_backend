@@ -1,5 +1,5 @@
 import express from 'express';
-import { createProduct, deleteProduct, getProduct, getProductByName, getProductByLinkName } from '../controllers/productController.js';
+import { createProduct, deleteProduct, getProduct, getProductByName, getProductByLinkName, updateProduct } from '../controllers/productController.js';
 
 const productRouter = express.Router();
 
@@ -8,5 +8,6 @@ productRouter.post('/',createProduct);  //link : localhost:5000/api/products (no
 productRouter.delete("/:productId",deleteProduct);  //link : localhost:5000/api/products ( DELETE by Id request)
 productRouter.get("/ByName",getProductByName);  //link : localhost:5000/api/products/ByName (Special GET request name attached to json body)
 productRouter.get("/:name",getProductByLinkName);  //link : localhost:5000/api/products/Tab A9 (Special GET request namme attached with link)
+productRouter.put("/:productId",updateProduct);  //link : localhost:5000/api/products ( update by Id request)
 
 export default productRouter;
