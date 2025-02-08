@@ -15,7 +15,7 @@ export async function createOrder(req,res){
 
     try{
         const latestOrder = await Order.find().sort
-        ({date : -1}).limit(1)
+        ({orderId : -1}).limit(1)
 
         let orderId
 
