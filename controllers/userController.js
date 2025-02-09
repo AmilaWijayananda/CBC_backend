@@ -103,7 +103,7 @@ export function isAdmin(req){
 
 
   export async function googleLogin(req,res){
-  console.log(req.body)
+  //console.log(req.body)
   const token = req.body.token
   //'https://www.googleapis.com/oauth2/v3/userinfo'
   try{
@@ -113,8 +113,10 @@ export function isAdmin(req){
       }
     })
     const email = response.data.email
+    //console.log(response.data)
     //check if user exists
     const usersList = await User.find({email: email})
+    //console.log(usersList)
     if(usersList.length >0){
       const user = usersList[0]
       const token = jwt.sign({
@@ -124,7 +126,7 @@ export function isAdmin(req){
         isBlocked : user.isBlocked,
         type : user.type,
         profilePicture : user.profilePicture
-      } , process.env.SECRET)
+      } , process.env.JWT_KEY)
       
       res.json({
         message: "User logged in",
