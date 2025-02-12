@@ -30,6 +30,7 @@ export async function createOrder(req,res){
         }
 
         const newOrderData = req.body
+        console.log(newOrderData)
 
         //need to create product details from product id
         const newProductArray = []
@@ -37,20 +38,20 @@ export async function createOrder(req,res){
         for(let i=0;i<newOrderData.orderedItems.length;i++){
 
             const product = await Product.findOne({
-                productID : newOrderData.orderedItems[i].productID
+                productId : newOrderData.orderedItems[i].productId
             })
 
             if(product == null){
                 res.json({
-                    message: "Product with id " + newOrderData.orderedItems[i].productID + " not found"
+                    message: "Product with id " + newOrderData.orderedItems[i].productId + " not found"
                 })
                 return
             }
 
             newProductArray[i] = {
-                name : product.ProductName,
+                name : product.productName,
                 price : product.price,
-                quantity : newOrderData.orderedItems[i].quantity,
+                quantity : newOrderData.orderedItems[i].qty,
                 Image: product.images.join(',')
             }
         }
