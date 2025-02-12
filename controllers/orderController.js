@@ -81,6 +81,7 @@ export async function createOrder(req,res){
 
 export async function getOrders(req, res) {
   
+  console.log(req.data)
     
     try {
       if (isCustomer(req)) {
@@ -179,12 +180,12 @@ export async function getOrders(req, res) {
         return;
       }
   
-      const notes = req.body.notes;
+      const note = req.body.note;
       const status = req.body.status;
   
       const updateOrder = await Order.findOneAndUpdate(
         { orderId: orderId },
-        { notes: notes, status: status }
+        { note: note, status: status }
       );
   
       res.json({
