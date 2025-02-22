@@ -4,7 +4,7 @@ import { createReview, getAllReviews, updateReviewStatus } from "../controllers/
 const reviewRouter = express.Router();
 
 reviewRouter.post("/",createReview)
-orderRouter.get("/", getAllReviews)
-orderRouter.put("/:reviewId",updateReviewStatus)
+reviewRouter.get("/", getAllReviews)
+reviewRouter.put("/:reviewId",updateReviewStatus)
 
 export default reviewRouter

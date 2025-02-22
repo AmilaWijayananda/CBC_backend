@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cors from "cors"
 import bannerRouter from "./routes/bannerRouter.js";
+import reviewRouter from "./routes/reviewRouter.js";
 
 dotenv.config();
 
@@ -59,7 +60,7 @@ app.use ("/api/products", productRouter); //create products path to productRoute
 app.use("/api/users", userRouter); //create users path to userRouter
 app.use("/api/orders", orderRouter) //create order path to orderRouter
 app.use ("/api/banner", bannerRouter);
-
+app.use ("/api/review", reviewRouter);
 
 //app.get("/",(req, res) => {
 //    console.log(req);
