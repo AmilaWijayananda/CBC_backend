@@ -8,6 +8,7 @@ import orderRouter from "./routes/orderRouter.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cors from "cors"
+import bannerRouter from "./routes/bannerRouter.js";
 
 dotenv.config();
 
@@ -57,6 +58,7 @@ app.use("/api/students", studentRouter);  //create students path to studentRoute
 app.use ("/api/products", productRouter); //create products path to productRouter
 app.use("/api/users", userRouter); //create users path to userRouter
 app.use("/api/orders", orderRouter) //create order path to orderRouter
+app.use ("/api/banner", bannerRouter);
 
 
 //app.get("/",(req, res) => {
