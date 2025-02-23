@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const reviewSchema = mongoose.Schema({
+    reviewId : {
+        type : String,
+        required : true
+    },
     email : {
         type : String,
         required : true
