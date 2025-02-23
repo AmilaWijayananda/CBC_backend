@@ -104,12 +104,12 @@ export function isAdmin(req){
 
   export async function googleLogin(req,res){
   //console.log(req.body)
-  const token = req.body.token
+  const Gtoken = req.body.token
   //'https://www.googleapis.com/oauth2/v3/userinfo'
   try{
     const response = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo',{
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${Gtoken}`
       }
     })
     const email = response.data.email

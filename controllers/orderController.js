@@ -30,7 +30,7 @@ export async function createOrder(req,res){
         }
 
         const newOrderData = req.body
-        console.log(newOrderData)
+        console.log("Oider Data",newOrderData)
 
         //need to create product details from product id
         const newProductArray = []
