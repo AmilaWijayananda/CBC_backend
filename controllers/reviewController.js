@@ -42,18 +42,24 @@ export async function createReview(req, res) {
     }
 }
 
-export async function getAllReviews(req, res) {
-    if (!isAdmin(req)) {
-        return res.status(403).json({ message: "Access denied. Only admins can view reviews." });
-    }
+export function getReview(req, res) {
+    Review.find({}).then((review) => {
+      res.json(review);
+    });
+  }
 
-    try {
-        const reviews = await Review.find();
-        res.json(reviews);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+// export async function getAllReviews(req, res) {
+//     if (!isAdmin(req)) {
+//         return res.status(403).json({ message: "Access denied. Only admins can view reviews." });
+//     }
+
+//     try {
+//         const reviews = await Review.find();
+//         res.json(reviews);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
 
 export async function updateReviewStatus(req, res) {
     if (!isAdmin(req)) {
