@@ -61,23 +61,47 @@ export function getReview(req, res) {
 //     }
 // }
 
-export async function updateReviewStatus(req, res) {
+// export async function updateReviewStatus(req, res) {
+//     if (!isAdmin(req)) {
+//         return res.status(403).json({ message: "Access denied. Only admins can update review status." });
+//     }
+
+//     const { reviewId, status } = req.body;
+//     if (!["Visible", "Non-Visible"].includes(status)) {
+//         return res.status(400).json({ message: "Invalid status value." });
+//     }
+
+//     try {
+//         const review = await Review.findOneAndUpdate({ reviewId }, { status }, { new: true });
+//         if (!review) {
+//             return res.status(404).json({ message: "Review not found." });
+//         }
+//         res.json({ message: "Review status updated successfully.", review });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
+
+export function updateReviewStatus(req, res) {
     if (!isAdmin(req)) {
-        return res.status(403).json({ message: "Access denied. Only admins can update review status." });
+      res.status(403).json({
+        message: "Please login as administrator",
+      });
+      return;
     }
-
-    const { reviewId, status } = req.body;
-    if (!["Visible", "Non-Visible"].includes(status)) {
-        return res.status(400).json({ message: "Invalid status value." });
+  
+    const reviewId = req.params.reviewId;
+    const updatedReviewData = req.body;
+  
+    Review.updateOne({ reviewId: reviewId }, updatedReviewData)
+      .then(() => {
+        res.json({
+          message: "Review status updated",
+        });
+      })
+      .catch((error) => {
+        res.status(403).json({
+          message: error,
+        });
+      }); 
     }
-
-    try {
-        const review = await Review.findOneAndUpdate({ reviewId }, { status }, { new: true });
-        if (!review) {
-            return res.status(404).json({ message: "Review not found." });
-        }
-        res.json({ message: "Review status updated successfully.", review });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
