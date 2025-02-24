@@ -1,4 +1,5 @@
-import Note from "../models/note";
+import Note from "../models/note.js";
+import { isAdmin } from "./userController.js";
 
 export function getNote(req, res) {
     Note.find({}).then((note) => {
@@ -6,32 +7,48 @@ export function getNote(req, res) {
     });
   }
   
-  export function createNote(req,res){
-    if(!isAdmin(req)){
-  
-      res.json({
-        message : "Please login as administrator"
-      })
-      return
+  export async function createNote(req, res) {
+    // Admin control
+    if (!isAdmin(req)) {
+        return res.status(403).json({ message: "Please login as an administrator to create a note." });
     }
-  
-    const newNoteData = req.body;
-  
-    // Log the product details to the console
-    console.log("Request Note Details:", newNoteData);
-  
-    const notes = new Note(newNoteData);
-  
-    notes.save().then(()=>{
-      res.json({
-        message: "Note created"
-      })
-    }).catch((error)=>{
-      res.status(403).json({
-        message: error
-      })
-    })
-  }
+
+    const { page, topic, note, status } = req.body;
+
+    try {
+        // Find the latest note to generate the next noteId
+        const latestNote = await Note.find().sort({ noteId: -1 }).limit(1);
+        let noteId;
+
+        if (latestNote.length === 0) {
+            // If no notes exist, start with NOTE0001
+            noteId = "NOTE0001";
+        } else {
+            // Extract the numeric part of the latest noteId and increment it
+            const currentNoteId = latestNote[0].noteId;
+            const numberString = currentNoteId.replace("NOTE", "");
+            const number = parseInt(numberString);
+            const newNumber = (number + 1).toString().padStart(4, "0");
+            noteId = "NOTE" + newNumber;
+        }
+
+        // Create the new note with auto-generated noteId and current date
+        const newNote = new Note({
+            noteId,
+            page,
+            topic,
+            note,
+            status,
+            date: new Date(), // Automatically set the current date
+        });
+
+        // Save the new note to the database
+        await newNote.save();
+        res.status(201).json({ message: "Note created successfully." });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
   
   export function deleteNote(req, res) {
     if (!isAdmin(req)) {

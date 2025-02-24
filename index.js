@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 import cors from "cors"
 import bannerRouter from "./routes/bannerRouter.js";
 import reviewRouter from "./routes/reviewRouter.js";
+import noteRouter from "./routes/noteRouter.js";
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ app.use("/api/users", userRouter); //create users path to userRouter
 app.use("/api/orders", orderRouter) //create order path to orderRouter
 app.use ("/api/banner", bannerRouter);
 app.use ("/api/review", reviewRouter);
+app.use ("/api/note", noteRouter);
 
 //app.get("/",(req, res) => {
 //    console.log(req);
