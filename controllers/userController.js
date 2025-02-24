@@ -179,3 +179,45 @@ export async function getUser(req,res){
 
   res.json(req.user)
 }
+
+export function getMe(req, res) {
+  // Extract the token from the Authorization header
+  const token = req.header("Authorization")?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Access denied. No token provided." });
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+    // Find the user by email (or ID, depending on what's stored in the token)
+    User.findOne({ email: decoded.email })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        // Return the user's details (excluding sensitive data like password)
+        res.json({
+          message: "User details fetched successfully",
+          user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            type: user.type,
+            profilePicture: user.profilePicture,
+            isBlocked: user.isBlocked,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ message: "Server error" });
+      });
+  } catch (error) {
+    console.error("Invalid token:", error);
+    res.status(400).json({ message: "Invalid token" });
+  }
+}
