@@ -44,7 +44,7 @@ export function getNote(req, res) {
 
         // Save the new note to the database
         await newNote.save();
-        res.status(201).json({ message: "Note created successfully." });
+        res.status(201).json(newNote);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
