@@ -25,6 +25,47 @@ const noteSchema = mongoose.Schema({
         type : String,
         required : true
     },
+    subnote : [
+        {
+            subtopic1 : {
+                type : String,
+                
+            },
+            subnote1 : {
+                type : String,
+                
+            },
+            subtopic2 : {
+                type : String,
+                
+            },
+            subnote2 : {
+                type : String,
+                
+            },
+            subtopic3 : {
+                type : String,
+                
+            },
+            subnote3 : {
+                type : String,
+                
+            },
+            subtopic4 : {
+                type : String,
+                
+            },
+            subnote4 : {
+                type : String,
+                
+            }
+        }
+    ],
+    language : {
+        type : String,
+        required : true
+    },
+
     });
      const Note = mongoose.model("note", noteSchema);
     
