@@ -13,7 +13,7 @@ export function getNote(req, res) {
         return res.status(403).json({ message: "Please login as an administrator to create a note." });
     }
 
-    const { page, topic, note, status } = req.body;
+    const { page, topic, note, status, subnote, language } = req.body;
 
     try {
         // Find the latest note to generate the next noteId
@@ -39,6 +39,17 @@ export function getNote(req, res) {
             topic,
             note,
             status,
+            subnote: subnote || [{
+                subtopic1: "",
+                subnote1: "",
+                subtopic2: "",
+                subnote2: "",
+                subtopic3: "",
+                subnote3: "",
+                subtopic4: "",
+                subnote4: ""
+            }],
+            language: language || "English", // Default to "English" if not provided
             date: new Date(), // Automatically set the current date
         });
 
