@@ -50,7 +50,7 @@ export async function createOrder(req,res){
 
             newProductArray[i] = {
                 name : product.productName,
-                price : product.price,
+                price : product.lastPrice,
                 quantity : newOrderData.orderedItems[i].qty,
                 Image: product.images.join(',')
             }
