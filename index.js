@@ -8,9 +8,11 @@ import orderRouter from "./routes/orderRouter.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cors from "cors"
+
 import bannerRouter from "./routes/bannerRouter.js";
 import reviewRouter from "./routes/reviewRouter.js";
 import noteRouter from "./routes/noteRouter.js";
+
 
 dotenv.config();
 
@@ -21,6 +23,8 @@ const app = express();
 
 //DB link hide in .env file and use as below
 const mongoUrl = process.env.MONGO_DB_URL
+
+
 
 app.use(cors())
 mongoose.connect(mongoUrl, {})
