@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import Student from "./models/student.js";
 import studentRouter from "./routes/studentRouter.js";
 import productRouter from "./routes/productRouter.js";
 import userRouter from "./routes/userRouter.js";
@@ -9,6 +8,11 @@ import orderRouter from "./routes/orderRouter.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cors from "cors"
+
+import bannerRouter from "./routes/bannerRouter.js";
+import reviewRouter from "./routes/reviewRouter.js";
+import noteRouter from "./routes/noteRouter.js";
+
 
 dotenv.config();
 
@@ -19,6 +23,7 @@ const app = express();
 
 //DB link hide in .env file and use as below
 const mongoUrl = process.env.MONGO_DB_URL
+
 
 
 app.use(cors())
@@ -59,7 +64,9 @@ app.use("/api/students", studentRouter);  //create students path to studentRoute
 app.use ("/api/products", productRouter); //create products path to productRouter
 app.use("/api/users", userRouter); //create users path to userRouter
 app.use("/api/orders", orderRouter) //create order path to orderRouter
-
+app.use ("/api/banner", bannerRouter);
+app.use ("/api/review", reviewRouter);
+app.use ("/api/note", noteRouter);
 
 //app.get("/",(req, res) => {
 //    console.log(req);

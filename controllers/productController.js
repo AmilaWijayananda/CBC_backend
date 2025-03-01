@@ -25,63 +25,78 @@ import { isAdmin } from "./userController.js";
 //get product using async await function
 
 
-export async function getProduct(req,res){
+// export async function getProduct(req,res){
 
-  try{
-    const productList = await Product.find()
+//   try{
+//     const productList = await Product.find()
 
-    res.json({
-      list : productList
-    })
-  }catch(e){
-    res.json({
-      message : "Error"
-    })
-  }
+//     res.json({
+//       list : productList
+//     })
+//   }catch(e){
+//     res.json({
+//       message : "Error"
+//     })
+//   }
+// }
+
+export function getProduct(req, res) {
+  Product.find({}).then((products) => {
+    res.json(products);
+  });
 }
 
-
 export function createProduct(req,res){
+
+
 
   if(!isAdmin(req)){
 
     res.json({
-      message : "Please login as admin"
+      message : "Please login as administrator"
     })
     return
   }
 
-  const product = new Product(req.body)
+  const newProductData = req.body;
+
+  // Log the product details to the console
+  console.log("Request Product Details:", newProductData);
+
+  const product = new Product(newProductData);
 
   product.save().then(()=>{
     res.json({
       message: "Product created"
     })
   }).catch((error)=>{
-    res.json({
+    res.status(403).json({
       message: error
     })
   })
 }
 
-export function deleteProduct(req,res){
-  Product.deleteOne({name : req.body.name}).then(
-    ()=>{
-      res.json(
-        {
-          message : "Product deleted successfully"
-        }
-      )
-    }
-  ).catch(
-    ()=>{
-      res.json(
-        {
-          message : "Product not deleted"
-        }
-      )
-    }
-  )
+export function deleteProduct(req, res) {
+  if (!isAdmin(req)) {
+    res.status(403).json({
+      message: "Please login as administrator",
+    });
+    return;
+  }
+
+  const productId = req.params.productId;
+
+  Product.deleteOne({ productId: productId })
+    .then(() => {
+      res.json({
+        message: "Product deleted",
+      });
+    })
+    .catch((error) => {
+      res.status(403).json({
+        message: error,
+      });
+    });
 }
 
 
@@ -124,5 +139,61 @@ export function getProductByLinkName(req,res){
     }
   )
 }
+
+export function updateProduct(req, res) {
+  if (!isAdmin(req)) {
+    res.status(403).json({
+      message: "Please login as administrator",
+    });
+    return;
+  }
+
+  const productId = req.params.productId;
+  const updatedProductData = req.body;
+
+  Product.updateOne({ productId: productId }, updatedProductData)
+    .then(() => {
+      res.json({
+        message: "Product updated",
+      });
+    })
+    .catch((error) => {
+      res.status(403).json({
+        message: error,
+      });
+    }); 
+  }
+
+  export async function getProductById(req, res) {
+    try {
+      const productId = req.params.productId;
+      const product = await Product.findOne({ productId: productId });
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({
+        message: error,
+      });
+    }
+    
+  }
+
+  export async function searchProducts(req, res) {
+    const query = req.params.query;
+    try {
+      const products = await Product.find({
+        $or: [
+          { productName: { $regex: query, $options: "i" } },
+          { altNames: { $elemMatch: { $regex: query, $options: "i" } } },
+        ],
+      });
+  
+      res.json(products);
+    } catch (e) {
+      res.status(500).json({
+        e,
+      });
+    }
+  }
+
 
 
