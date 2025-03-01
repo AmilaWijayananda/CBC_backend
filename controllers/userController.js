@@ -145,7 +145,7 @@ export function isAdmin(req){
         email: email,
         firstName: response.data.given_name,
         lastName: response.data.family_name,
-        type: "customer",
+        type: "Customer",
         password: "ffffff",
         profilePicture: response.data.picture
       }

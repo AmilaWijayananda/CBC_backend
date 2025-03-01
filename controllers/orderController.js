@@ -81,7 +81,7 @@ export async function createOrder(req,res){
 
 export async function getOrders(req, res) {
   
-  console.log(req.data)
+  //console.log("google data",req.user)
     
     try {
       if (isCustomer(req)) {
