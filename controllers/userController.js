@@ -234,6 +234,18 @@ export async function getCustomers(req, res) {
   }
 }
 
+export async function getAdmins(req, res) {
+  if (!isAdmin(req)) {
+      return res.status(403).json({ message: "Unauthorized" });
+  }
+  try {
+      const admins = await User.find({ type: "admin" }).select('-password');
+      res.status(200).json(admins);
+  } catch (error) {
+      res.status(500).json({ message: "Failed to fetch admins", error: error.message });
+  }
+}
+
 // export async function updateCustomerStatus(req, res) {
 //   if (!isAdmin(req)) {
 //       return res.status(403).json({ message: "Unauthorized" });
@@ -248,7 +260,7 @@ export async function getCustomers(req, res) {
 //   }
 // }
 
-export function updateCustomerStatus(req, res) {
+export function updateUserStatus(req, res) {
   console.log(req.body);
   if (!isAdmin(req)) {
     res.status(403).json({
@@ -257,13 +269,13 @@ export function updateCustomerStatus(req, res) {
     return;
   }
 
-  const customerEmail = req.params.customerEmail;
-  const updatedCustomerData = req.body;
+  const userEmail = req.params.userEmail;
+  const updatedUserData = req.body;
 
-  User.updateOne({ customerEmail: customerEmail }, updatedCustomerData)
+  User.updateOne({ userEmail: userEmail }, updatedUserData)
     .then(() => {
       res.json({
-        message: "Customer status updated",
+        message: "User status updated",
       });
     })
     .catch((error) => {
