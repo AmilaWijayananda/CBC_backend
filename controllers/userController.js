@@ -221,3 +221,26 @@ export function getMe(req, res) {
     res.status(400).json({ message: "Invalid token" });
   }
 }
+
+export async function getCustomers(req, res) {
+  // Check if the user is an admin
+  if (!isAdmin(req)) {
+      return res.status(403).json({
+          message: "Unauthorized: Only admins can access this resource"
+      });
+  }
+
+  try {
+      // Fetch all customers (users with type "Customer")
+      const customers = await User.find({ type: "Customer" }).select('-password'); // Exclude passwords from the response
+
+      // Return the list of customers
+      res.status(200).json(customers);
+  } catch (error) {
+      // Handle any errors that occur during the database query
+      res.status(500).json({
+          message: "An error occurred while fetching customers",
+          error: error.message
+      });
+  }
+}
