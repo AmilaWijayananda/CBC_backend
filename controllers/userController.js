@@ -223,24 +223,52 @@ export function getMe(req, res) {
 }
 
 export async function getCustomers(req, res) {
-  // Check if the user is an admin
   if (!isAdmin(req)) {
-      return res.status(403).json({
-          message: "Unauthorized: Only admins can access this resource"
-      });
+      return res.status(403).json({ message: "Unauthorized" });
   }
-
   try {
-      // Fetch all customers (users with type "Customer")
-      const customers = await User.find({ type: "Customer" }).select('-password'); // Exclude passwords from the response
-
-      // Return the list of customers
+      const customers = await User.find({ type: "Customer" }).select('-password');
       res.status(200).json(customers);
   } catch (error) {
-      // Handle any errors that occur during the database query
-      res.status(500).json({
-          message: "An error occurred while fetching customers",
-          error: error.message
-      });
+      res.status(500).json({ message: "Failed to fetch customers", error: error.message });
   }
 }
+
+// export async function updateCustomerStatus(req, res) {
+//   if (!isAdmin(req)) {
+//       return res.status(403).json({ message: "Unauthorized" });
+//   }
+//   try {
+//       const { customerEmail } = req.params;
+//       const { isBlocked } = req.body;
+//       const updatedCustomer = await User.findByIdAndUpdate(customerEmail, { isBlocked }, { new: true });
+//       res.status(200).json(updatedCustomer);
+//   } catch (error) {
+//       res.status(500).json({ message: "Failed to update customer status", error: error.message });
+//   }
+// }
+
+export function updateCustomerStatus(req, res) {
+  console.log(req.body);
+  if (!isAdmin(req)) {
+    res.status(403).json({
+      message: "Please login as administrator",
+    });
+    return;
+  }
+
+  const customerEmail = req.params.customerEmail;
+  const updatedCustomerData = req.body;
+
+  User.updateOne({ customerEmail: customerEmail }, updatedCustomerData)
+    .then(() => {
+      res.json({
+        message: "Customer status updated",
+      });
+    })
+    .catch((error) => {
+      res.status(403).json({
+        message: error,
+      });
+    }); 
+  }
