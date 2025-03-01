@@ -284,3 +284,17 @@ export function updateUserStatus(req, res) {
       });
     }); 
   }
+
+  export function createAdmin(req, res) {
+    const newAdminData = req.body;
+    newAdminData.password = bcrypt.hashSync(newAdminData.password, 10);
+    newAdminData.type = "admin"; // Ensure the type is set to "Admin"
+
+    const user = new User(newAdminData);
+
+    user.save().then(() => {
+        res.json({ message: "User created" });
+    }).catch(() => {
+        res.json({ message: "User not created" });
+    });
+}
